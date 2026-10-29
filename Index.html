@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EsToDoList</title>
+ 
+  <!-- Tailwind CSS via CDN (mesmo usado nas etapas anteriores) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+ 
+  <!--
+    PÁGINA BASEADA NO WIREFRAME:
+      1. Header   -> botão de menu | título | campo de pesquisa | avatar
+      2. Main     -> cartão "MAIS TAREFAS" com a lista de tarefas e a barra de rolagem lateral
+      3. Footer   -> faixa inferior
+    Cores e estilo seguem o projeto anterior (indigo + slate).
+  -->
+  <style>
+    /* Slider vertical (barra lateral do wireframe).
+       Só o writing-mode precisa de CSS puro, o Tailwind não tem classe para isso. */
+    .slider-vertical {
+      writing-mode: vertical-lr;
+      width: 1.5rem;
+    }
+  </style>
+</head>
+ 
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+ 
+  <!-- ===================================================== -->
+  <!-- 1. HEADER                                             -->
+  <!-- ===================================================== -->
+  <header class="bg-white border-b-2 border-slate-800">
+    <div class="max-w-5xl mx-auto px-3 py-3 flex items-center justify-between gap-4">
+ 
+      <!-- Botão de menu (hambúrguer) -->
+      <button type="button" aria-label="Abrir menu"
+              class="shrink-0 border-2 border-slate-800 rounded-lg p-2 transition-colors duration-300 hover:bg-indigo-100 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+ 
+      <!-- Título do app -->
+      <h1 class="text-xl md:text-3xl font-bold text-indigo-600 md:flex-1 md:text-left md:pl-6">EsToDoList</h1>
+ 
+      <!-- Campo de pesquisa (escondido no celular, aparece a partir de md) -->
+      <div class="hidden md:flex items-center w-full max-w-sm border-2 border-slate-800 rounded-lg px-3 bg-white focus-within:ring-4 focus-within:ring-indigo-300">
+        <input type="search" placeholder="Pesquisar tarefa..."
+               class="w-full py-2 bg-transparent outline-none placeholder:text-slate-400">
+        <!-- Ícone de lupa -->
+        <svg class="w-5 h-5 shrink-0 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </div>
+ 
+      <!-- Avatar do usuário (círculo) -->
+      <button type="button" aria-label="Perfil"
+              class="shrink-0 w-12 h-12 rounded-full bg-slate-800 text-white flex items-center justify-center border-2 border-slate-800 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8z"/>
+        </svg>
+      </button>
+    </div>
+ 
+    <!-- Pesquisa no celular: aparece abaixo do header, só em telas pequenas -->
+    <div class="md:hidden px-4 pb-4">
+      <div class="flex items-center border-2 border-slate-800 rounded-lg px-3 bg-white focus-within:ring-4 focus-within:ring-indigo-300">
+        <input type="search" placeholder="Pesquisar tarefa..."
+               class="w-full py-3 bg-transparent outline-none placeholder:text-slate-400">
+        <svg class="w-5 h-5 shrink-0 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+ 
+<!-- ===================================================== -->
+<!-- 2. MAIN                                               -->
+<!-- ===================================================== -->
+<main class="flex-1 w-full max-w-full mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
+ 
+    <!-- Cartão principal com borda arredondada (igual ao quadro do wireframe) -->
+    <section class="bg-white border-2 border-slate-800 rounded-2xl overflow-hidden h-125 lg:col-span-2">
+ 
+      <!-- Título do cartão + linha divisória -->
+      <h2 class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800">
+        Mais tarefas
+      </h2>
+ 
+      <!-- Área da lista: lista de tarefas + slider lateral -->
+      <div class="flex gap-4 p-4">
+ 
+        <!-- Lista de tarefas com altura fixa e rolagem vertical -->
+        <ul id="lista-tarefas" class="flex-1 space-y-4 h-96  overflow-y-auto pr-1">
+ 
+          <!-- ================= TAREFA 1 ================= -->
+          <li class="flex items-center gap-3">
+            <!-- Checkbox (quadrado grande à esquerda) -->
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <!-- Barra da tarefa: nome, prazo e menu de três pontos -->
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Trabalho de História</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 20/10/2026</span>
+              <!-- Botão de três pontos (menu da tarefa) -->
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+ 
+          <!-- ================= TAREFA 2 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Estudar para a prova de Matemática</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 22/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+ 
+          <!-- ================= TAREFA 3 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Ler capítulo 4 de Português</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 24/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+ 
+          <!-- ================= TAREFA 4 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Entregar projeto no GitHub</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 26/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+ 
+          <!-- ================= TAREFA 5 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Resumo de Biologia</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+          <!-- ================= TAREFA 5 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Resumo de Biologia</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+ 
+          <!-- ================= TAREFA 6 ================= -->
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+                   class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Lista de exercícios de Física</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 30/10/2026</span>
+              <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/>
+                </svg>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+<!-- ===================================================== -->
+<!-- FORMULÁRIO: CADASTRAR TAREFA                          -->
+<!-- ===================================================== -->
+<section class="relative bg-white border-2 border-slate-800 rounded-2xl overflow-hidden lg:col-span-1">
+
+  <!-- Título do cartão + linha divisória -->
+  <h2 class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800">
+    Cadastrar tarefa
+  </h2>
+
+  <!-- Botão X: limpa o formulário -->
+  <button type="reset" form="form-tarefa" aria-label="Limpar formulário"
+          class="absolute top-2 right-3 text-xl leading-none p-1 rounded hover:bg-slate-100">&times;</button>
+
+  <!-- Os atributos "name" são os nomes dos campos que o Python vai receber -->
+  <form id="form-tarefa" class="p-4 space-y-4">
+
+    <!-- Tarefa -->
+    <div>
+      <label for="tarefa" class="block text-sm font-medium mb-1">Tarefa</label>
+      <input id="tarefa" name="tarefa" type="text" required
+             class="w-full border-2 border-slate-800 rounded-lg px-3 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+    </div>
+
+    <!-- Descrição -->
+    <div>
+      <label for="descricao" class="block text-sm font-medium mb-1">Descrição</label>
+      <textarea id="descricao" name="descricao" rows="3"
+                class="w-full border-2 border-slate-800 rounded-lg px-3 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-300"></textarea>
+    </div>
+
+    <!-- Categoria -->
+    <div>
+      <label for="categoria" class="block text-sm font-medium mb-1">Categoria</label>
+      <select id="categoria" name="categoria"
+              class="w-full border-2 border-slate-800 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        <option value="">Selecionar</option>
+        <option value="prova">Prova</option>
+        <option value="trabalho">Trabalho</option>
+        <option value="leitura">Leitura</option>
+      </select>
+    </div>
+
+    <!-- Prazo | Status (lado a lado) -->
+    <div class="grid grid-cols-2 gap-4">
+
+      <!-- Prazo -->
+      <div>
+        <label for="prazo" class="block text-sm font-medium mb-1">Prazo</label>
+        <input id="prazo" name="prazo" type="date"
+               class="w-full border-2 border-slate-800 rounded-lg px-2 py-2 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+      </div>
+
+      <!-- Status -->
+      <div>
+        <label for="status" class="block text-sm font-medium mb-1">Status</label>
+        <select id="status" name="status"
+                class="w-full border-2 border-slate-800 rounded-lg px-2 py-2 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
+          <option value="pendente">Pendente</option>
+          <option value="andamento">Em andamento</option>
+          <option value="concluida">Concluída</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Prioridade -->
+    <div>
+      <label for="prioridade" class="block text-sm font-medium mb-1">Prioridade</label>
+      <select id="prioridade" name="prioridade"
+              class="w-full border-2 border-slate-800 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        <option value="baixa">Baixa</option>
+        <option value="media">Média</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
+
+    <!-- Botões -->
+    <div class="flex gap-3">
+      <button type="submit"
+              class="flex-1 bg-indigo-600 text-white font-semibold border-2 border-slate-800 rounded-lg px-4 py-2 transition-colors duration-300 hover:bg-indigo-800">
+        Salvar
+      </button>
+      <button type="reset"
+              class="flex-1 font-semibold border-2 border-slate-800 rounded-lg px-4 py-2 transition-colors duration-300 hover:bg-slate-100">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</section>
+  </main>
+ 
+  <!-- ===================================================== -->
+  <!-- 3. FOOTER (faixa inferior do wireframe)               -->
+  <!-- ===================================================== -->
+  <footer class="bg-white border-t-2 border-slate-800 py-4 text-center text-sm text-slate-500">
+    EsToDoList · Organize sua rotina escolar
+  </footer>
+ 
+</body>
+</html>
