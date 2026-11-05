@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarefas concluídas | EsToDoList</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./script.js" defer></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
+
+  <!-- ===================================================== -->
+  <!-- 1. HEADER                                             -->
+  <!-- ===================================================== -->
+
+  <header class="bg-white border-b-2 border-slate-800">
+    <div class="px-6 py-3 flex items-center justify-between gap-8">
+
+      <!-- Botão do menu sanduíche -->
+      <button id="abrir-menu" type="button" aria-label="Abrir menu de navegação" aria-haspopup="dialog"
+        aria-controls="menu-lateral"
+        class="shrink-0 rounded-lg border-2 border-slate-800 p-2 hover:bg-indigo-100 focus-visible:ring-4 focus-visible:ring-indigo-300">
+        <svg aria-hidden="true" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" viewBox="0 0 24 24">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+
+      <!-- Barra lateral -->
+      <dialog id="menu-lateral" aria-labelledby="titulo-menu"
+        class="fixed inset-y-0 left-0 right-auto m-0 h-full max-h-none w-72 max-w-[85vw] overflow-y-auto border-r-2 border-slate-800 bg-white p-4 text-slate-800 shadow-xl backdrop:bg-black/40">
+        <div class="flex min-h-full flex-col">
+          <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
+            <h2 id="titulo-menu" class="text-lg font-bold text-indigo-600">
+              EsToDoList
+            </h2>
+
+            <form method="dialog">
+              <button type="submit" aria-label="Fechar menu" autofocus
+                class="rounded-lg px-3 py-1 text-2xl hover:bg-slate-100 focus-visible:ring-4 focus-visible:ring-indigo-300">
+                &times;
+              </button>
+            </form>
+          </div>
+
+          <nav aria-label="Opções do EsToDoList" class="mt-4 space-y-2">
+            <a href="Index.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Início
+            </a>
+
+            <a href="edicao.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Editar Tarefa
+            </a>
+
+            <a href="./concluidas.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Tarefas concluídas
+            </a>
+
+            <a href="./excluidas.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Tarefas excluídas
+            </a>
+
+            <a href="./configuracoes.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Configurações
+            </a>
+          </nav>
+
+
+          <div class="mt-auto">
+            <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-red-700 hover:bg-red-50">
+              Sair da conta
+            </button>
+          </div>
+        </div>
+      </dialog>
+
+      <!-- Título do app -->
+      <h1 class="text-xl md:text-3xl font-bold text-indigo-600 md:flex-1 md:text-left">
+        <a href="./index.html" class="no-underline">EsToDoList</a>
+      </h1>
+
+      <!-- Campo de pesquisa (escondido no celular, aparece a partir de md) -->
+      <div
+        class="hidden md:flex items-center w-full max-w-sm border-2 border-slate-800 rounded-lg px-3 bg-white focus-within:ring-4 focus-within:ring-indigo-300">
+        <input type="search" placeholder="Pesquisar tarefa..."
+          class="w-full py-2 bg-transparent outline-none placeholder:text-slate-400">
+        <!-- Ícone de lupa -->
+        <svg class="w-5 h-5 shrink-0 text-slate-600" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.3-4.3" />
+        </svg>
+      </div>
+
+      <!-- Avatar do usuário (círculo) -->
+      <button type="button" aria-label="Perfil"
+        class="shrink-0 w-12 h-12 rounded-full bg-slate-800 text-white flex items-center justify-center border-2 border-slate-800 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Pesquisa no celular: aparece abaixo do header, só em telas pequenas -->
+    <div class="md:hidden px-4 pb-4">
+      <div
+        class="flex items-center border-2 border-slate-800 rounded-lg px-3 bg-white focus-within:ring-4 focus-within:ring-indigo-300">
+        <input type="search" placeholder="Pesquisar tarefa..."
+          class="w-full py-3 bg-transparent outline-none placeholder:text-slate-400">
+        <svg class="w-5 h-5 shrink-0 text-slate-600" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.3-4.3" />
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================== -->
+  <!-- 2. MAIN                                               -->
+  <!-- ===================================================== -->
+
+  <main class="flex-1 w-full mx-auto max-w-4xl px-4 py-6">
+    <section aria-labelledby="titulo-concluidas"
+      class="rounded-2xl border-2 border-slate-800 bg-white">
+      <h1 id="titulo-concluidas"
+        class="border-b-2 border-slate-800 px-4 py-3 text-lg font-semibold">
+        Tarefas concluídas
+      </h1>
+
+      <div class="p-4">
+        <p id="mensagem-concluidas" class="rounded-lg bg-slate-100 p-4 text-slate-600">
+          Nenhuma tarefa concluída por enquanto.
+        </p>
+        <ul id="lista-concluidas" class="space-y-3"></ul>
+      </div>
+    </section>
+  </main>
+
+
+  <!-- ===================================================== -->
+  <!-- 3. FOOTER (faixa inferior do wireframe)               -->
+  <!-- ===================================================== -->
+   
+  <footer class="bg-white border-t-2 border-slate-800 py-6 text-center text-sm text-slate-500">
+    EsToDoList · Organize sua rotina escolar
+  </footer>
+</body>
+</html>

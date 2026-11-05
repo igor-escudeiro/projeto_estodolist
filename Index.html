@@ -8,6 +8,7 @@
 
   <!-- Tailwind CSS via CDN (mesmo usado nas etapas anteriores) -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./script.js" defer></script>
 
   <!--
     PÁGINA BASEADA NO WIREFRAME:
@@ -34,14 +35,58 @@
   <header class="bg-white border-b-2 border-slate-800">
     <div class="px-6 py-3 flex items-center justify-between gap-8">
 
-      <!-- Botão de menu (hambúrguer) -->
-      <button type="button" aria-label="Abrir menu"
-        class="shrink-0 border-2 border-slate-800 rounded-lg p-2 transition-colors duration-300 hover:bg-indigo-100 focus:outline-none focus:ring-4 focus:ring-indigo-300">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          viewBox="0 0 24 24">
+      <!-- Botão do menu sanduíche -->
+      <button id="abrir-menu" type="button" aria-label="Abrir menu de navegação" aria-haspopup="dialog"
+        aria-controls="menu-lateral"
+        class="shrink-0 rounded-lg border-2 border-slate-800 p-2 hover:bg-indigo-100 focus-visible:ring-4 focus-visible:ring-indigo-300">
+        <svg aria-hidden="true" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" viewBox="0 0 24 24">
           <path d="M4 7h16M4 12h16M4 17h16" />
         </svg>
       </button>
+
+      <!-- Barra lateral -->
+      <dialog id="menu-lateral" aria-labelledby="titulo-menu"
+        class="fixed inset-y-0 left-0 right-auto m-0 h-full max-h-none w-72 max-w-[85vw] overflow-y-auto border-r-2 border-slate-800 bg-white p-4 text-slate-800 shadow-xl backdrop:bg-black/40">
+        <div class="flex min-h-full flex-col">
+          <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
+            <h2 id="titulo-menu" class="text-lg font-bold text-indigo-600">
+              EsToDoList
+            </h2>
+
+            <form method="dialog">
+              <button type="submit" aria-label="Fechar menu" autofocus
+                class="rounded-lg px-3 py-1 text-2xl hover:bg-slate-100 focus-visible:ring-4 focus-visible:ring-indigo-300">
+                &times;
+              </button>
+            </form>
+          </div>
+
+          <nav aria-label="Opções do EsToDoList" class="mt-4 space-y-2">
+            <a href="edicao.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Editar Tarefa
+            </a>
+
+            <a href="./concluidas.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Tarefas concluídas
+            </a>
+
+            <a href="./excluidas.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Tarefas excluídas
+            </a>
+
+            <a href="./configuracoes.html" class="block rounded-lg px-3 py-2 hover:bg-indigo-100">
+              Configurações
+            </a>
+          </nav>
+
+          <div class="mt-auto">
+            <button type="submit" class="w-full rounded-lg px-3 py-2 text-left text-red-700 hover:bg-red-50">
+              Sair da conta
+            </button>
+          </div>
+        </div>
+      </dialog>
 
       <!-- Título do app -->
       <h1 class="text-xl md:text-3xl font-bold text-indigo-600 md:flex-1 md:text-left">EsToDoList</h1>
@@ -87,204 +132,174 @@
   <!-- ===================================================== -->
   <!-- 2. MAIN                                               -->
   <!-- ===================================================== -->
-<main class="flex-1 w-full max-w-full mx-auto pl-4 pr-4 lg:pl-10 pt-6 pb-6 grid grid-cols-1 lg:grid-cols-3 gap-16 items-start content-start lg:items-stretch">
-  <!-- Mais tarefas -->
-  <section class="bg-white border-2 border-slate-800 rounded-2xl overflow-hidden lg:col-span-2 lg:w-[95%] lg:flex lg:flex-col">
-  <h2 class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800 lg:shrink-0">
-    Mais tarefas
-  </h2>
+  <main
+    class="flex-1 w-full max-w-full mx-auto pl-4 pr-4 lg:pl-10 pt-6 pb-6 grid grid-cols-1 lg:grid-cols-3 gap-16 items-start content-start lg:items-stretch">
 
-  <div class="flex gap-4 p-4 lg:flex-1 lg:flex-col lg:min-h-0">
-    <ul id="lista-tarefas" class="flex-1 space-y-3 h-72 overflow-y-auto pr-1 lg:flex-auto lg:min-h-0">
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Trabalho de História</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 20/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
+    <!-- Cadastrar tarefa -->
+    <section class="relative bg-white border-2 border-slate-800 rounded-2xl overflow-hidden lg:col-span-1 lg:w-[85%]">
+      <h2 class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800">
+        Cadastrar tarefa
+      </h2>
 
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Estudar para a prova de Matemática</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 22/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Ler capítulo 4 de Português</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 24/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Entregar projeto no GitHub</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 26/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Resumo de Biologia</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Resumo de Biologia</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-
-        <li class="flex items-center gap-3">
-          <input type="checkbox" aria-label="Concluir tarefa"
-            class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
-          <div class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
-            <span class="font-medium">Lista de exercícios de Física</span>
-            <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 30/10/2026</span>
-            <button type="button" aria-label="Opções da tarefa" class="shrink-0 p-1 rounded hover:bg-slate-100">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="5" r="1.8" />
-                <circle cx="12" cy="12" r="1.8" />
-                <circle cx="12" cy="19" r="1.8" />
-              </svg>
-            </button>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Cadastrar tarefa -->
-  <section class="relative bg-white border-2 border-slate-800 rounded-2xl overflow-hidden lg:col-span-1 lg:w-[85%]">
-    <h2 class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800">
-      Cadastrar tarefa
-    </h2>
-
-    <button type="reset" form="form-tarefa" aria-label="Limpar formulário"
-      class="absolute top-2 right-3 text-xl leading-none p-1 rounded hover:bg-slate-100">&times;</button>
-
-    <form id="form-tarefa" class="p-3 space-y-2">
-      <div>
-        <label for="tarefa" class="block text-sm font-medium mb-1">Tarefa</label>
-        <input id="tarefa" name="tarefa" type="text" required
-          class="w-full border-2 border-slate-800 rounded-lg px-3 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300">
-      </div>
-
-      <div>
-        <label for="descricao" class="block text-sm font-medium mb-1">Descrição</label>
-        <textarea id="descricao" name="descricao" rows="2"
-          class="block w-full border-2 border-slate-800 rounded-lg px-3 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300"></textarea>
-      </div>
-
-      <div>
-        <label for="categoria" class="block text-sm font-medium mb-1">Categoria</label>
-        <select id="categoria" name="categoria"
-          class="w-full border-2 border-slate-800 rounded-lg px-3 py-1 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
-          <option value="">Selecionar</option>
-          <option value="prova">Prova</option>
-          <option value="trabalho">Trabalho</option>
-          <option value="leitura">Leitura</option>
-        </select>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3">
+      <form id="form-tarefa" class="p-3 space-y-2">
         <div>
-          <label for="prazo" class="block text-sm font-medium mb-1">Prazo</label>
-          <input id="prazo" name="prazo" type="date"
-            class="w-full border-2 border-slate-800 rounded-lg px-2 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+          <label for="tarefa" class="block text-sm font-medium mb-1">Tarefa</label>
+          <input id="tarefa" name="tarefa" type="text" required
+            class="w-full border-2 border-slate-800 rounded-lg px-3 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300">
         </div>
 
         <div>
-          <label for="status" class="block text-sm font-medium mb-1">Status</label>
-          <select id="status" name="status"
-            class="w-full border-2 border-slate-800 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
-            <option value="pendente">Pendente</option>
-            <option value="andamento">Em andamento</option>
-            <option value="concluida">Concluída</option>
+          <label for="descricao" class="block text-sm font-medium mb-1">Descrição</label>
+          <textarea id="descricao" name="descricao" rows="2"
+            class="block w-full border-2 border-slate-800 rounded-lg px-3 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300"></textarea>
+        </div>
+
+        <div>
+          <label for="categoria" class="block text-sm font-medium mb-1">Categoria</label>
+          <input id="categoria" name="categoria" type="text"
+            class="w-full rounded-lg border-2 border-slate-800 px-3 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="prazo" class="block text-sm font-medium mb-1">Prazo</label>
+            <input id="prazo" name="prazo" type="date"
+              class="w-full border-2 border-slate-800 rounded-lg px-2 py-1 focus:outline-none focus:ring-4 focus:ring-indigo-300">
+          </div>
+
+          <div>
+            <label for="status" class="block text-sm font-medium mb-1">Status</label>
+            <select id="status" name="status"
+              class="w-full text-sm border-2 border-slate-800 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
+              <option>Pendente</option>
+              <option>Em andamento</option>
+              <option>Concluída</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="prioridade" class="block text-sm font-medium mb-1">Prioridade</label>
+          <select id="prioridade" name="prioridade"
+            class="w-full border-2 border-slate-800 rounded-lg px-3 py-1 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
+            <option>Baixa</option>
+            <option>Média</option>
+            <option>Alta</option>
           </select>
         </div>
-      </div>
 
-      <div>
-        <label for="prioridade" class="block text-sm font-medium mb-1">Prioridade</label>
-        <select id="prioridade" name="prioridade"
-          class="w-full border-2 border-slate-800 rounded-lg px-3 py-1 bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300">
-          <option value="baixa">Baixa</option>
-          <option value="media">Média</option>
-          <option value="alta">Alta</option>
-        </select>
-      </div>
+        <div class="flex gap-3">
+          <button type="submit"
+            class="flex-1 bg-indigo-600 text-white font-semibold border-2 border-slate-800 rounded-lg px-4 py-1 transition-colors duration-300 hover:bg-indigo-800">
+            Salvar
+          </button>
+          <button type="reset"
+            class="flex-1 font-semibold border-2 border-slate-800 rounded-lg px-4 py-1 transition-colors duration-300 hover:bg-slate-100">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
 
-      <div class="flex gap-3">
-        <button type="submit"
-          class="flex-1 bg-indigo-600 text-white font-semibold border-2 border-slate-800 rounded-lg px-4 py-1 transition-colors duration-300 hover:bg-indigo-800">
-          Salvar
-        </button>
-        <button type="reset"
-          class="flex-1 font-semibold border-2 border-slate-800 rounded-lg px-4 py-1 transition-colors duration-300 hover:bg-slate-100">
-          Cancelar
-        </button>
+    <!-- Mais tarefas -->
+    <section
+      class="bg-white border-2 border-slate-800 rounded-2xl overflow-hidden lg:col-span-2 lg:w-[95%] lg:flex lg:flex-col">
+      <h2
+        class="text-center text-sm font-semibold tracking-wide uppercase py-3 border-b-2 border-slate-800 lg:shrink-0">
+        Mais tarefas
+      </h2>
+
+      <div class="flex gap-4 p-4 lg:flex-1 lg:flex-col lg:min-h-0">
+        <ul id="lista-tarefas" class="flex-1 space-y-3 h-72 overflow-y-auto pr-1 lg:flex-auto lg:min-h-0">
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Trabalho de História</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 20/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Estudar para a prova de Matemática</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 22/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Ler capítulo 4 de Português</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 24/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Entregar projeto no GitHub</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 26/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Resumo de Biologia</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Resumo de Biologia</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 28/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+
+          <li class="flex items-center gap-3">
+            <input type="checkbox" aria-label="Concluir tarefa"
+              class="shrink-0 w-10 h-10 rounded-lg accent-indigo-600 cursor-pointer">
+            <div
+              class="flex-1 flex items-center justify-between gap-3 border-2 border-slate-800 rounded-lg px-4 py-2 transition-shadow duration-300 hover:ring-4 hover:ring-indigo-300">
+              <span class="font-medium">Lista de exercícios de Física</span>
+              <span class="ml-auto text-xs text-slate-500 whitespace-nowrap">Prazo: 30/10/2026</span>
+              <button type="button"
+                class="shrink-0 rounded-lg border-2 border-black bg-red-600 px-3 py-1 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-4 focus-visible:ring-red-300 ">Excluir</button>
+            </div>
+          </li>
+        </ul>
       </div>
-    </form>
-  </section>
-</main>
+    </section>
+
+
+  </main>
 
   <!-- ===================================================== -->
   <!-- 3. FOOTER (faixa inferior do wireframe)               -->
